@@ -10,7 +10,7 @@ get_local_version() {
 echo "Your Supersonic Version: $(get_local_version)" # Output current version installed.
 
 get_latest_release() {
-	# Credit to @lukechilds on Github for the outline.
+	# Credit to @lukechilds on Github for the script.
 	curl --silent "https://api.github.com/repos/dweymouth/supersonic/releases/latest" | # Get latest release from GitHub api
 	grep '"tag_name":' |                                              		    # Get tag line
 	sed -E 's/.*"v([^"]+)".*/\1/'                              			    # Pluck JSON value
