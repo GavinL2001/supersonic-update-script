@@ -25,13 +25,13 @@ get_kernel() {
 echo "Your Supersonic Version: $(get_local_version)" # Output current version installed.
 echo "Latest Supersonic Version: $(get_latest_release)" # Output latest release on GitHub.
 
-if [ "$(get_local_version)" == "$(get_latest_release)" ] # Compare the installed and latest version from GitHub.
+if [[ "$(get_local_version)" == "$(get_latest_release)" ]] # Compare the installed and latest version from GitHub.
 
 	then
 		echo "You are up-to-date!" # Explains that the user's version is already up-to-date.
 		exit 0
 
-	elif [ $(get_kernel) < 18 ] # Checks if OS version is legacy.
+	elif [[ $(get_kernel) < 18 ]] # Checks if OS version is legacy.
 
 	then # Installs legacy version if the statement is true
 		echo "Your Supersonic version is out-of-date!" ; echo "Downloading the latest legacy update." && # Display's the user's processor type, the fact it's running a legacy version of macOS, and that the update is being downloaded.
