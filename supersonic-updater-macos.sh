@@ -12,8 +12,8 @@ echo "Your Supersonic Version: $(get_local_version)" # Output current version in
 get_latest_release() {
 	# Credit to @lukechilds on Github for the outline.
 	curl --silent "https://api.github.com/repos/dweymouth/supersonic/releases/latest" | # Get latest release from GitHub api
-	grep '"tag_name":' |                                              					# Get tag line
-	sed -E 's/.*"v([^"]+)".*/\1/'                              							# Pluck JSON value
+	grep '"tag_name":' |                                              		    # Get tag line
+	sed -E 's/.*"v([^"]+)".*/\1/'                              			    # Pluck JSON value
 }
 
 echo "Latest Supersonic Version: $(get_latest_release)" # Output latest release on GitHub.
