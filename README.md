@@ -1,9 +1,7 @@
 # Supersonic Update Script for macOS
 A bash script to update/install [Supersonic](https://github.com/dweymouth/supersonic) on macOS.
 
-**Depends on:** ``curl wget`` (You can use [homebrew](https://brew.sh/) to install wget with ``brew install wget``)
-
-**Usage:** ``wget -q -O - https://raw.githubusercontent.com/GavinL2001/supersonic-update-script/main/supersonic-updater-macos.sh | bash``
+**Usage:** ``curl -sL https://raw.githubusercontent.com/GavinL2001/supersonic-update-script/main/supersonic-updater-macos.sh | bash``
 
 ## Known Issues
 - The application will get flagged as corrupted if an old version is installed using the traditional method but never opened to verify with Apple before using the update script.
