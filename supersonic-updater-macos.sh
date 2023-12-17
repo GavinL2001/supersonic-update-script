@@ -34,14 +34,14 @@ if [[ "$(get_local_version)" == "$(get_latest_release)" ]] # Compare the install
 	elif [[ $(get_kernel) < 18 ]] # Checks if OS version is legacy.
 
 	then # Installs legacy version if the statement is true
-		echo "Your Supersonic version is out-of-date!" ; echo "Downloading the latest legacy update." && # Display's the user's processor type, the fact it's running a legacy version of macOS, and that the update is being downloaded.
+		echo "Your Supersonic version is out-of-date!" ; echo "Downloading the latest legacy update." && # Explain that the application is out-of-date and that the update is being downloaded.
 		wget -q https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$(get_latest_release)-mac-legacy-HighSierra-x64.zip -O $HOME/tmp/Supersonic.zip && # Grab the latest .zip file from GitHub and move to the user's tmp folder.
 		unzip -o -qq $HOME/tmp/Supersonic.zip -d /Applications/ && # Unzip file into the Applications folder.
 		rm $HOME/tmp/Supersonic.zip && # Remove the downloaded zip file after unzipping.
 		echo "Update completed!" ;
 		exit 0
 	else
-		echo "Your Supersonic version is out-of-date!" ; echo "Downloading the latest update." && # Explain that the update is being downloaded.
+		echo "Your Supersonic version is out-of-date!" ; echo "Downloading the latest update." && # Explain that the application is out-of-date and that the update is being downloaded.
 		wget -q https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$(get_latest_release)-mac-$(get_platform).zip -O $HOME/tmp/Supersonic.zip && # Grab the latest .zip file from GitHub and move to the user's tmp folder.
 		unzip -o -qq $HOME/tmp/Supersonic.zip -d /Applications/ && # Unzip file into the Applications folder.
 		rm $HOME/tmp/Supersonic.zip && # Remove the downloaded zip file after unzipping.
