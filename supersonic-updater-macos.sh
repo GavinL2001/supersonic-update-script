@@ -25,6 +25,7 @@ get_kernel() {
 }
 
 install() {
+		[ -d $HOME/tmp ] || mkdir -p $HOME/tmp
 		curl -sL $download_url -o $location                                                                                              # Grab the latest .zip file from GitHub and move to the user's tmp folder.
 		unzip -o -qq $location -d /Applications/                                                                                         # Unzip file into the Applications folder.
 		rm $location                                                                                                                     # Remove the downloaded zip file after unzipping.
