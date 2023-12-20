@@ -42,7 +42,7 @@ location=$HOME/tmp/Supersonic.zip                                               
 
 # The Update Process
 
-printf "Supersonic Update Scrip for macOS\nCreated by Gavin Liddell\nRepo: https://github.com/GavinL2001/supersonic-update-script\n"             # Show source and creator of the project.
+printf "Supersonic Update Script for macOS\nCreated by Gavin Liddell\nRepo: https://github.com/GavinL2001/supersonic-update-script\n"             # Show source and creator of the project.
 sleep 1
 printf "\nChecking for update.\nYour Supersonic Version: $local\nLatest Supersonic Version: $latest\n"                                           # Output current and latest version.
 
