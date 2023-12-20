@@ -1,7 +1,7 @@
 # Supersonic Update Script for macOS
-A zsh script to update/install [Supersonic](https://github.com/dweymouth/supersonic) on macOS.
+A bash script to update/install [Supersonic](https://github.com/dweymouth/supersonic) on macOS.
 
-**Usage:** ``curl -sL https://www.gavinliddell.us/sus | zsh``
+**Usage:** ``curl -sL https://www.gavinliddell.us/sus | bash``
 
 ## Known Issues
 - The application will get flagged as corrupted if an old version is installed using the traditional method but never opened to verify with Apple before using the update script.
