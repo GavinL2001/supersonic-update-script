@@ -2,7 +2,7 @@
 # Created by Gavin Liddell
 # https://github.com/GavinL2001/supersonic-update-script
 
-#!/bin/zsh
+#!/bin/bash
 
 # Functions
 
