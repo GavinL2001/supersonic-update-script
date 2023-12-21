@@ -7,7 +7,7 @@
 # Functions
 
 get_local_version() {
-	defaults read /Applications/Supersonic.app/Contents/Info.plist CFBundleShortVersionString 2>/dev/null || echo "Not Installed"            # Fetch current version installed.
+	defaults read /Applications/Supersonic.app/Contents/Info.plist CFBundleShortVersionString 2>/dev/null || echo "Not Installed."           # Fetch current version installed.
 }
 
 get_latest_version() {                                                                                                                           # Credit to @lukechilds on Github for the function.
