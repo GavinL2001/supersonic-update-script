@@ -7,7 +7,7 @@
 # Functions
 
 get_local_version() {
-	defaults read /Applications/Supersonic.app/Contents/Info.plist CFBundleShortVersionString                                                # Fetch current version installed.
+	defaults read /Applications/Supersonic.app/Contents/Info.plist CFBundleShortVersionString 2>/dev/null || echo "Not Installed"            # Fetch current version installed.
 }
 
 get_latest_version() {                                                                                                                           # Credit to @lukechilds on Github for the function.
@@ -25,7 +25,7 @@ get_kernel() {
 }
 
 install() {
-		[ -d $HOME/tmp ] || mkdir -p $HOME/tmp
+		[ -d $HOME/tmp ] || mkdir -p $HOME/tmp                                                                                           # Check for tmp folder on user's machine.
 		curl -sL $download_url -o $location                                                                                              # Grab the latest .zip file from GitHub and move to the user's tmp folder.
 		unzip -o -qq $location -d /Applications/                                                                                         # Unzip file into the Applications folder.
 		rm $location                                                                                                                     # Remove the downloaded zip file after unzipping.
@@ -43,7 +43,7 @@ location=$HOME/tmp/Supersonic.zip                                               
 
 # The Update Process
 
-printf "Supersonic Update Script for macOS\nCreated by Gavin Liddell\nRepo: https://github.com/GavinL2001/supersonic-update-script\n"             # Show source and creator of the project.
+printf "Supersonic Update Script for macOS\nCreated by Gavin Liddell\nRepo: https://github.com/GavinL2001/supersonic-update-script\n"            # Show source and creator of the project.
 sleep 1
 printf "\nChecking for update.\nYour Supersonic Version: $local\nLatest Supersonic Version: $latest\n"                                           # Output current and latest version.
 
