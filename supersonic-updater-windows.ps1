@@ -73,13 +73,10 @@ If ($local -ne $null) {
 
 If ($local -eq $latest) { 
     Write-Output "You are up-to-date!"
-    Exit
 } ElseIf ($local -eq $null) {
     Write-Output "Supersonic not installed!`nInstalling..."
     Run-Install
-    Exit
 } Else {
     Write-Output "Your Supersonic version is out-of-date!`nInstalling the latest update."
     Run-Update
-    Exit
 }
