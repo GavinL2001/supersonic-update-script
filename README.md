@@ -2,7 +2,9 @@
 A bash script to update/install [Supersonic](https://github.com/dweymouth/supersonic) on macOS or Windows.
 
 **macOS Usage:** ``curl -sL https://www.gavinliddell.us/sus | bash``
+
 **Windows Usage:** ``irm https://raw.githubusercontent.com/GavinL2001/supersonic-update-script/main/supersonic-updater-windows.ps1 | iex``
+
 ## Known Issues
 - The application will get flagged as corrupted if an old version is installed using the traditional method but never opened to verify with Apple before using the update script.
   - Solution: Open or remove old version before running the script.
