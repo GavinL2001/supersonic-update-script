@@ -61,6 +61,7 @@ Function Update-Shortcut {
     $shortcut = $shell.CreateShortcut("$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Supersonic.lnk")
     $shortcut.TargetPath = "$installPath\Supersonic.exe"
     $shortcut.Save()
+    Return
 }
 
 If ($local -eq $latest) {Write-Output "You are up-to-date!"}
