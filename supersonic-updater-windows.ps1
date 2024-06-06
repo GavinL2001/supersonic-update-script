@@ -3,80 +3,74 @@
 # https://github.com/GavinL2001/supersonic-update-script
 
 Write-Output "Supersonic Update Script for Windows`nCreated by Gavin Liddell`nRepo: https://github.com/GavinL2001/supersonic-update-script`n"
+Write-Output "Checking for update..."
 Start-Sleep -Seconds 1
 
-function Find-Path {
-    $path = "$env:ProgramFiles\Supersonic"
-    If (Test-Path $path) {
-        return $path
+Function Find-Path {
+    $timeoutSeconds = 2
+    $pathSearch = {Get-ChildItem -Path C:\ -Filter 'Supersonic.exe' -Exclude '*.pf' -File -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1}
+    $j = Start-Job -ScriptBlock $pathSearch
+    If (Wait-Job $j -Timeout $timeoutSeconds) {
+        $result = Receive-Job $j
+        Remove-Job -force $j
+        If ($result.Name -eq 'Supersonic.exe') {Return $result.DirectoryName}
+        Else {Return $null}
     } Else {
-        return $null
+        Remove-Job -force $j
+        Return $null
     }
 }
 
 $filePath = Find-Path
 
-function Pull-Local {
+Function Pull-Local {
     If ($filePath -ne $null) {
         $fileLocation = Join-Path -Path $filePath -ChildPath 'Supersonic.exe'
         $versionInfo = (Get-Item $fileLocation).VersionInfo
         $fileVersion = "$($versionInfo.FileMajorPart).$($versionInfo.FileMinorPart).$($versionInfo.FileBuildPart)"
-        return $fileVersion
-    } Else {
-        return $null
-    }
-    
+        Return $fileVersion
+    } Else {Return $null}
 }
 
 $local = Pull-Local -Directory $filePath
 
-function Pull-Latest {
+Function Pull-Latest {
     $request = Invoke-RestMethod -Uri https://api.github.com/repos/dweymouth/supersonic/releases/latest | ConvertTo-Json
     $data = $request | ConvertFrom-Json
-    return $data.name
+    Return $data.name
 }
 
 $latest = Pull-Latest
 
-function Run-Install {
+Function Run-Process {
     $url = "https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$latest-windows-x64.zip"
     $location = "$env:temp\Supersonic-$latest-windows-x64.zip"
+    $checkLoc = Test-Path "$env:ProgramFiles\Supersonic"
     Invoke-WebRequest -Uri $url -OutFile "$location"
-    New-Item -Path "$env:ProgramFiles" -Name "Supersonic" -ItemType "directory" -Force
-    Expand-Archive -Path "$location" -DestinationPath "$env:ProgramFiles\Supersonic" -Force
-    $shell = New-Object -ComObject WScript.Shell
-    $shortcut = $shell.CreateShortcut("$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Supersonic.lnk")
-    $shortcut.TargetPath = "$env:ProgramFiles\Supersonic\Supersonic.exe"
-    $shortcut.Save()
+    If ($filePath -eq $null -and $checkLoc -eq $false) {
+        New-Item -Path "$env:ProgramFiles" -Name "Supersonic" -ItemType "directory"
+        $installpath = "$env:ProgramFiles\Supersonic"
+    } Else {$installpath = "$env:ProgramFiles\Supersonic"}
+    Expand-Archive -Path "$location" -DestinationPath "$installPath" -Force
     Remove-Item -Path "$env:temp\Supersonic-$latest-windows-x64.zip"
     Return
 }
 
-function Run-Update {
-    $url = "https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$latest-windows-x64.zip"
-    $location = "$env:temp\Supersonic-$latest-windows-x64.zip"
-    Invoke-WebRequest -Uri $url -OutFile "$location"
-    Expand-Archive -Path "$location" -DestinationPath "$filePath" -Force
+Function Update-Shortcut {
     $shell = New-Object -ComObject WScript.Shell
     $shortcut = $shell.CreateShortcut("$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Supersonic.lnk")
-    $shortcut.TargetPath = "$filePath\Supersonic.exe"
+    $shortcut.TargetPath = "$installPath\Supersonic.exe"
     $shortcut.Save()
-    Remove-Item -Path "$env:temp\Supersonic-$latest-windows-x64.zip"
-    Return
 }
 
-Write-Output "Checking for update..."
-
-If ($local -ne $null) {
-    Write-Output "Detected version: $local`nLatest version: $latest"
-}
-
-If ($local -eq $latest) { 
-    Write-Output "You are up-to-date!"
-} ElseIf ($local -eq $null) {
+If ($local -eq $latest) {Write-Output "You are up-to-date!"}
+ElseIf ($local -ne $null) {Write-Output "Detected version: $local`nLatest version: $latest"}
+ElseIf ($local -eq $null) {
     Write-Output "Supersonic not installed!`nInstalling..."
-    Run-Install
+    Run-Process
+    Update-Shortcut
 } Else {
-    Write-Output "Your Supersonic version is out-of-date!`nInstalling the latest update."
-    Run-Update
+    Write-Output "Your Supersonic version is out-of-date!`nInstalling the latest update..."
+    Run-Process
+    Update-Shortcut
 }
