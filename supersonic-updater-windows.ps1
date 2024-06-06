@@ -62,6 +62,7 @@ Function Update-Shortcut {
     $shortcut.Save()
     Return
 }
+
 If ($env:PROCESSOR_ARCHITECTURE -ne "AMD64") {Write-Error "Unsupported platform detected! This program only supports x64 processors."}
 ElseIf ($local -eq $latest) {Write-Output "You are up-to-date!"}
 ElseIf ($local -ne $null) {Write-Output "Detected version: $local`nLatest version: $latest"}
