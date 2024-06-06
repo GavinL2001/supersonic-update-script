@@ -4,7 +4,6 @@
 
 Write-Output "Supersonic Update Script for Windows`nCreated by Gavin Liddell`nRepo: https://github.com/GavinL2001/supersonic-update-script`n"
 Write-Output "Checking for update..."
-Start-Sleep -Seconds 1
 
 Function Find-Path {
     $timeoutSeconds = 2
