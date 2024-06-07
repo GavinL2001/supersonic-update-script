@@ -6,26 +6,19 @@ Write-Output "Supersonic Update Script for Windows`nCreated by Gavin Liddell`nRe
 Write-Output "Checking for update..."
 
 Function Find-Path {
-    $timeoutSeconds = 5
-    $pathSearch = {Get-ChildItem -Path C:\ -Filter 'Supersonic.exe' -Exclude '*.pf' -File -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1}
-    $j = Start-Job -ScriptBlock $pathSearch
-    If (Wait-Job $j -Timeout $timeoutSeconds) {
-        $result = Receive-Job $j
-        Remove-Job -force $j
-        If ($result.Name -eq 'Supersonic.exe') {Return $result.DirectoryName}
-        Else {Return $null}
-    } Else {
-        Remove-Job -force $j
-        Return $null
-    }
+    $include = "${env:ProgramFiles(x86)}\", "$env:ProgramFiles\", "$env:USERPROFILE\"
+    $exclude = "*.pf", "$env:USERPROFILE\AppData"
+    $pathSearch = Get-ChildItem -Path $include -Exclude $exclude -Filter "Supersonic.exe" -File -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+    If ($pathSearch.Name -eq 'Supersonic.exe') {Return $pathSearch.DirectoryName}
+    Else {Return $null}
 }
 
 $filePath = Find-Path
 
 Function Pull-Local {
     If ($filePath -ne $null) {
-        $fileLocation = Join-Path -Path $filePath -ChildPath 'Supersonic.exe'
-        $versionInfo = (Get-Item $fileLocation).VersionInfo
+        $joinFile = Join-Path -Path $filePath -ChildPath "Supersonic.exe"
+        $versionInfo = (Get-Item $joinFile).VersionInfo
         $fileVersion = "$($versionInfo.FileMajorPart).$($versionInfo.FileMinorPart).$($versionInfo.FileBuildPart)"
         Return $fileVersion
     } Else {Return $null}
@@ -48,7 +41,7 @@ Function Check-Path {
         $installPath = "$env:ProgramFiles\Supersonic"
         Return $installPath
     } Else {
-        New-Item "$env:ProgramFiles\Supersonic" -ItemType "directory"
+        New-Item "$env:ProgramFiles\Supersonic" -ItemType "directory" -ErrorAction Stop
         $installPath = "$env:ProgramFiles\Supersonic"
         Return $installPath
     }
@@ -59,17 +52,17 @@ $appPath = Check-Path
 Function Install-Update {
     $url = "https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$latest-windows-x64.zip"
     $location = "$env:temp\Supersonic-$latest-windows-x64.zip"
-    $testLocation = Test-Path $location
-    If ($testLocation -eq $true) {Expand-Archive -Path "$location" -DestinationPath "$appPath" -Force}
+    $testLocation = Test-Path $location -ErrorAction Stop
+    If ($testLocation -eq $true) {Expand-Archive -Path "$location" -DestinationPath "$appPath" -Force -ErrorAction Stop}
     Else {
-        Invoke-WebRequest -Uri $url -OutFile "$location"
-        Expand-Archive -Path "$location" -DestinationPath "$appPath" -Force
+        Invoke-WebRequest -Uri $url -OutFile "$location" -ErrorAction Stop
+        Expand-Archive -Path "$location" -DestinationPath "$appPath" -Force -ErrorAction Stop
     }
     Return
 }
 
 Function Test-Install {
-    $testInstall = Test-Path $appPath\Supersonic.exe
+    $testInstall = Test-Path $appPath\Supersonic.exe -ErrorAction Stop
     If ($testInstall -eq $true) {Write-Output "Supersonic installed successfully!"}
     Else {Write-Output "Supersonic failed to install."}
     Return
@@ -77,7 +70,7 @@ Function Test-Install {
 
 Function Update-Shortcut {
     $shortcutPath = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Supersonic.lnk"
-    $testShortcut = Test-Path "$shortcutPath"
+    $testShortcut = Test-Path "$shortcutPath" -ErrorAction Stop
     If ($testShortcut = $true) {Remove-Item -Path "$shortcutPath"}
     $shell = New-Object -ComObject WScript.Shell
     $shortcut = $shell.CreateShortcut("$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Supersonic.lnk")
