@@ -34,8 +34,8 @@ Function Pull-Local {
 }
 
 Function Pull-Latest {
-    $request = Invoke-RestMethod -Uri https://api.github.com/repos/dweymouth/supersonic/releases/latest | Select-Object -ExpandProperty name
-    Return $request
+    $request = Invoke-RestMethod -Uri https://api.github.com/repos/dweymouth/supersonic/releases/latest
+    Return $request.name
 }
 
 Function Check-Path {
