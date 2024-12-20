@@ -15,8 +15,8 @@ Function Find-Path {
 
 $filePath = Find-Path
 
-Function Pull-Local {
-    If ($filePath -ne $null) {
+Function Get-Local {
+    If ($null -ne $filePath) {
         $joinFile = Join-Path -Path $filePath -ChildPath "Supersonic.exe"
         $versionInfo = (Get-Item $joinFile).VersionInfo
         $fileVersion = "$($versionInfo.FileMajorPart).$($versionInfo.FileMinorPart).$($versionInfo.FileBuildPart)"
@@ -24,20 +24,20 @@ Function Pull-Local {
     } Else {Return $null}
 }
 
-$local = Pull-Local -Directory $filePath
+$local = Get-Local -Directory $filePath
 
-Function Pull-Latest {
+Function Get-Latest {
     $request = Invoke-RestMethod -Uri https://api.github.com/repos/dweymouth/supersonic/releases/latest | ConvertTo-Json
     $data = $request | ConvertFrom-Json
     Return $data.name
 }
 
-$latest = Pull-Latest
+$latest = Get-Latest
 
-Function Check-Path {
+Function Search-Path {
     $checkLoc = Test-Path "$env:ProgramFiles\Supersonic"
-    If ($filePath -ne $null) {Return $filePath}
-    ElseIf ($filePath -eq $null -and $checkLoc -ne $false) {
+    If ($null -ne $filePath) {Return $filePath}
+    ElseIf ($null -eq $filePath -and $checkLoc -ne $false) {
         $installPath = "$env:ProgramFiles\Supersonic"
         Return $installPath
     } Else {
@@ -47,7 +47,7 @@ Function Check-Path {
     }
 }
 
-$appPath = Check-Path
+$appPath = Search-Path
 
 Function Install-Update {
     $url = "https://github.com/dweymouth/supersonic/releases/latest/download/Supersonic-$latest-windows-x64.zip"
@@ -87,7 +87,7 @@ If ($env:PROCESSOR_ARCHITECTURE -ne "AMD64") {
     Write-Output "You are up-to-date!"
     Update-Shortcut
 }
-ElseIf ($local -eq $null) {
+ElseIf ($null -eq $local) {
     Write-Output "Supersonic not installed!`nInstalling..."
     Install-Update
     Update-Shortcut
