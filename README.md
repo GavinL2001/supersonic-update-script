@@ -1,3 +1,7 @@
+# This has now been archived due to upstream adding cleaner install methods.
+
+Please use the methods added for Windows in the [v0.12.0](https://github.com/dweymouth/supersonic/releases/tag/v0.12.0) and for macOS in the [v0.15.0](https://github.com/dweymouth/supersonic/releases/tag/v0.15.0) releases.
+
 # Supersonic Update Script for macOS and Windows
 Scripts to update/install [Supersonic](https://github.com/dweymouth/supersonic) for macOS or Windows.
 
